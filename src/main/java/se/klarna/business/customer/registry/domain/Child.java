@@ -1,20 +1,14 @@
-package se.klarna.business.customer.registry.persistence.domain;
+package se.klarna.business.customer.registry.domain;
 
-import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name = "child")
-public class Child {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @Column(nullable = false)
+public class Child implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String name;
-
-    @Column(nullable = false)
     private Date birthday;
 
 

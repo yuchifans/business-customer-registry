@@ -1,37 +1,35 @@
 package se.klarna.business.customer.registry.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import se.klarna.business.customer.registry.domain.Child;
+import se.klarna.business.customer.registry.domain.Customer;
 import se.klarna.business.customer.registry.exception.ChildNotFoundException;
-import se.klarna.business.customer.registry.exception.CustomerNotFoundException;
-import se.klarna.business.customer.registry.persistence.domain.Child;
-import se.klarna.business.customer.registry.persistence.domain.Customer;
-import se.klarna.business.customer.registry.persistence.repository.CustomerRepository;
+import se.klarna.business.customer.registry.repository.CustomerRepository;
+import se.klarna.business.customer.registry.repository.CustomerRepositoryImpl;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-@Service("customerRegistryService")
 public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    @Override
+    public CustomerRegistryServiceImpl() {
+        this.customerRepository = new CustomerRepositoryImpl();
+    }
+
     public Customer getCustomerBySsn(String ssn) {
-        return customerRepository.findById(ssn)
-                .orElseThrow(CustomerNotFoundException::new);
+        return customerRepository.findCustomerBySsn(ssn);
     }
 
     @Override
     public Customer addCustomer(Customer customer) {
-        return customerRepository.save(customer);
+        return customerRepository.saveCustomer(customer) ;
     }
 
     @Override
-    public Child getOldestChild(String ssn) {
-        Customer customer = customerRepository.findById(ssn).orElseThrow(CustomerNotFoundException::new);
+    public Child getOldestChildByCustomerSsn(String ssn) {
+        Customer customer = customerRepository.findCustomerBySsn(ssn);
         List<Child> children = customer.getChildren();
         if (children == null || children.size() == 0) {
             throw new ChildNotFoundException();

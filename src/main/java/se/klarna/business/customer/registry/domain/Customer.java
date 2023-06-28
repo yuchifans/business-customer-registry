@@ -1,26 +1,17 @@
-package se.klarna.business.customer.registry.persistence.domain;
+package se.klarna.business.customer.registry.domain;
 
-
-
-import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "customer")
-public class Customer {
+public class Customer implements Serializable {
 
-    @Id
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String ssn;
-
-    @Column
     private String name;
-
-    @Column
     private String spouse;
-
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Child> children = new ArrayList<Child>();
 
     public String getSsn() {
